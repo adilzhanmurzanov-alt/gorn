@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>G.O.R.N.</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;600;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden}
+#loader{position:fixed;inset:0;z-index:200;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s ease}
+#loader.done{opacity:0;pointer-events:none}
+#term{font-family:'JetBrains Mono',monospace;font-size:13px;color:rgba(255,255,255,0.45);letter-spacing:0.04em;width:340px;max-width:90vw;line-height:2;position:relative}
+#term .ln{opacity:0;transition:opacity 0.25s ease,transform 0.25s ease;transform:translateY(3px)}
+#term .ln.on{opacity:1;transform:translateY(0)}
+.blink{display:inline-block;width:7px;height:13px;background:rgba(255,255,255,0.55);margin-left:2px;animation:bl .6s step-end infinite}
+@keyframes bl{50%{opacity:0}}
+#term .ln.glitch{animation:glitchText .15s linear}
+@keyframes glitchText{0%{transform:translateX(0)}20%{transform:translateX(-3px) skewX(-2deg);filter:blur(1px)}40%{transform:translateX(4px) skewX(1deg);filter:none}60%{transform:translateX(-2px);filter:blur(.5px)}80%{transform:translateX(1px) skewX(-1deg)}100%{transform:translateX(0);filter:none}}
+#logo-reveal{font-family:'Inter',sans-serif;font-size:32px;font-weight:800;letter-spacing:.34em;opacity:0;margin-top:40px}
+#logo-reveal.on{opacity:1}
+#logo-reveal.glitch-logo{animation:glitchLogo .4s ease-out}
+@keyframes glitchLogo{0%{opacity:0;filter:blur(8px)}15%{opacity:1;transform:translateX(-6px);text-shadow:3px 0 #fff,-3px 0 rgba(255,255,255,.3);filter:blur(2px)}30%{transform:translateX(4px);text-shadow:-2px 0 #fff;filter:none}45%{transform:translateX(-2px);text-shadow:1px 0 #fff}60%{transform:translateX(1px);text-shadow:none}100%{opacity:1;transform:translateX(0);filter:none}}
+#logo-sub{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:rgba(255,255,255,.25);opacity:0;margin-top:8px;transition:opacity .6s ease .2s}
+#logo-sub.on{opacity:1}
+#loader::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,.012) 2px,rgba(255,255,255,.012) 4px);pointer-events:none;z-index:1}
+.h-glitch{position:absolute;left:0;right:0;height:2px;background:rgba(255,255,255,.08);opacity:0;pointer-events:none;z-index:2}
+.h-glitch.flash{animation:hFlash .12s linear;opacity:1}
+@keyframes hFlash{0%{opacity:.15;transform:scaleX(1)}50%{opacity:.06;transform:scaleX(1.4)}100%{opacity:0;transform:scaleX(.8)}}
+#bg{position:fixed;inset:0;z-index:1}
+#spacer{position:relative;z-index:2;pointer-events:none}
+#ov{position:fixed;inset:0;z-index:10;pointer-events:none}
+.sc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;opacity:0;transition:opacity .55s ease}
+.sc.on{opacity:1}
+.h1{font-size:clamp(38px,9vw,76px);font-weight:800;letter-spacing:.22em;line-height:1;margin-bottom:10px;text-shadow:0 0 80px rgba(255,255,255,.12)}
+.sub{font-family:'JetBrains Mono',monospace;font-size:clamp(9px,1.6vw,12px);letter-spacing:.2em;color:rgba(255,255,255,.35);text-transform:uppercase}
+.fl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:rgba(255,255,255,.22);text-transform:uppercase;margin-bottom:14px}
+.t2{font-size:clamp(20px,4.5vw,38px);font-weight:800;letter-spacing:.01em;line-height:1.25;margin-bottom:14px}
+.bd{font-size:clamp(13px,2.2vw,16px);font-weight:300;color:rgba(255,255,255,.5);max-width:460px;line-height:1.75}
+.big{font-family:'JetBrains Mono',monospace;font-size:clamp(34px,8vw,60px);font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+.sm{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;color:rgba(255,255,255,.28);text-transform:uppercase}
+.btn{pointer-events:all;display:inline-block;margin-top:30px;padding:15px 44px;border:1px solid rgba(255,255,255,.28);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#fff;text-decoration:none;background:0 0;cursor:pointer;transition:all .25s ease}
+.btn:hover{background:#fff;color:#000;border-color:#fff}
+#prog{position:fixed;top:0;left:0;height:1px;background:rgba(255,255,255,.18);z-index:50;width:0}
+</style>
+</head>
+<body>
+<div id="loader">
+  <div id="term">
+    <div class="ln" data-d="50">establishing secure connection...<span class="blink"></span></div>
+    <div class="ln" data-d="400">loading construction graph...</div>
+    <div class="ln" data-d="750">initializing point cloud engine...</div>
+    <div class="ln" data-d="1100">cross-referencing field data...</div>
+    <div class="ln" data-d="1450">calibrating transparency index...</div>
+    <div class="ln" data-d="1750">system ready_</div>
+  </div>
+  <div id="logo-reveal">G.O.R.N.</div>
+  <div id="logo-sub">Ground Operations Real-time Network</div>
+</div>
+<div id="prog"></div>
+<div id="bg"></div>
+<div id="spacer"></div>
+<div id="ov">
+  <div class="sc" data-s="0"><div class="h1">G.O.R.N.</div><div class="sub">Ground Operations Real-time Network</div></div>
+  <div class="sc" data-s="1"><div class="fl">Проблема</div><div class="t2">Один человек отвечает<br>миллиардами за тысячу сварщиков</div><div class="bd">Его единственные инструменты — братья, «свои» люди и молитвы. Отчёты опаздывают на неделю. Правда приходит, когда уже поздно.</div></div>
+  <div class="sc" data-s="2"><div class="big">73% ≠ 85%</div><div class="sm">AI факт vs отчёт прораба</div><div class="bd" style="margin-top:22px">GORN собирает данные от нескольких источников и сопоставляет. Бригадир, каменщик, кладовщик — три версии одной правды.</div></div>
+  <div class="sc" data-s="3"><div class="fl">Как это работает</div><div class="t2">Данные — побочный<br>продукт пользы</div><div class="bd">Прораб диктует отчёт за 3 минуты вместо 30. Кладовщик сканирует QR вместо тетрадки. Они экономят время — система получает данные.</div></div>
+  <div class="sc" data-s="4"><div class="fl">Transparency score</div><div class="big">67</div><div class="sm">рейтинг бригадира Асланова ↓5</div><div class="bd" style="margin-top:22px">Каждый отчитывающийся получает рейтинг. Система не обвиняет — она показывает, кому из говорящих можно верить.</div></div>
+  <div class="sc" data-s="5"><div class="fl">Вы видите всё. В реальном времени.</div><div class="h1" style="font-size:clamp(26px,6vw,50px)">G.O.R.N.</div><div class="bd">Управляйте рисками, а не людьми.</div><a class="btn" href="mailto:hello@gorn.build">Запросить пилот</a></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+var SECTIONS=6,PX_PER=700,FLOORS=21,BW=16,BD=10,FH=3.0;
+var maxY=FLOORS*FH; // 63
+document.getElementById('spacer').style.height=(SECTIONS*PX_PER)+'px';
+
+// Camera: start at mid-upper building, end below ground
+var CAM_Y_START=maxY*0.55; // ~35, upper-middle of building
+var CAM_Y_END=-8;
+var ANG_START=0.6;
+var RAD_START=26;
+
+(function(){
+  var loader=document.getElementById('loader');
+  var lines=document.querySelectorAll('#term .ln');
+  var glitchIv=setInterval(function(){
+    if(Math.random()>.4){
+      var bar=document.createElement('div');bar.className='h-glitch';
+      bar.style.top=Math.random()*100+'%';bar.style.height=(1+Math.random()*3)+'px';
+      loader.appendChild(bar);requestAnimationFrame(function(){bar.classList.add('flash')});
+      setTimeout(function(){bar.remove()},150);
+    }
+  },120);
+  lines.forEach(function(l,i){
+    setTimeout(function(){
+      l.classList.add('on','glitch');setTimeout(function(){l.classList.remove('glitch')},150);
+      if(i>0){var c=lines[i-1].querySelector('.blink');if(c)c.remove()}
+      if(i<lines.length-1){var b=document.createElement('span');b.className='blink';l.appendChild(b)}
+    },+l.dataset.d);
+  });
+  setTimeout(function(){document.getElementById('logo-reveal').classList.add('on','glitch-logo');document.getElementById('logo-sub').classList.add('on')},2100);
+  setTimeout(function(){boot()},2400);
+  setTimeout(function(){clearInterval(glitchIv);loader.classList.add('done')},3000);
+})();
+
+function mkPts(){
+  var pos=[],ops=[],red=[];
+  function add(x,y,z,o,r){pos.push(x,y,z);ops.push(o);red.push(r?1:0)}
+  for(var f=0;f<FLOORS;f++){
+    var y=f*FH;
+    for(var i=0;i<280;i++) add((Math.random()-.5)*BW,y,(Math.random()-.5)*BD,.2+Math.random()*.35,Math.random()<.008);
+    for(var i=0;i<90;i++) add((Math.random()-.5)*BW,y+FH-.04,(Math.random()-.5)*BD,.08+Math.random()*.16,false);
+    for(var i=0;i<200;i++){
+      var s=i%4,x,z,wy=y+Math.random()*FH;
+      if(s===0){x=-BW/2;z=(Math.random()-.5)*BD}else if(s===1){x=BW/2;z=(Math.random()-.5)*BD}
+      else if(s===2){x=(Math.random()-.5)*BW;z=-BD/2}else{x=(Math.random()-.5)*BW;z=BD/2}
+      add(x,wy,z,.1+Math.random()*.25,Math.random()<.006);
+    }
+    [[-BW*.4,-BD*.4],[BW*.4,-BD*.4],[-BW*.4,BD*.4],[BW*.4,BD*.4],[0,0],[-BW*.18,-BD*.18],[BW*.18,BD*.18]].forEach(function(c){
+      for(var j=0;j<14;j++) add(c[0]+(Math.random()-.5)*.3,y+Math.random()*FH,c[1]+(Math.random()-.5)*.3,.3+Math.random()*.45,Math.random()<.01);
+    });
+    for(var i=0;i<70;i++){
+      var perim=Math.random()*2*(BW+BD),ex,ez;
+      if(perim<BW){ex=-BW/2+perim;ez=-BD/2}else if(perim<BW+BD){ex=BW/2;ez=-BD/2+(perim-BW)}
+      else if(perim<2*BW+BD){ex=BW/2-(perim-BW-BD);ez=BD/2}else{ex=-BW/2;ez=BD/2-(perim-2*BW-BD)}
+      add(ex+(Math.random()-.5)*.1,y+(Math.random()-.5)*.06,ez+(Math.random()-.5)*.1,.3+Math.random()*.4,false);
+    }
+    for(var i=0;i<60;i++) add((Math.random()-.5)*BW*.65,y+.2+Math.random()*1.6,(Math.random()-.5)*BD*.65,.04+Math.random()*.1,false);
+    for(var i=0;i<24;i++){
+      var ws=i%4,wx,wz,wy2=y+FH*.25+Math.random()*FH*.5;
+      if(ws===0){wx=-BW/2-.06;wz=(Math.random()-.5)*BD*.65}else if(ws===1){wx=BW/2+.06;wz=(Math.random()-.5)*BD*.65}
+      else if(ws===2){wx=(Math.random()-.5)*BW*.65;wz=-BD/2-.06}else{wx=(Math.random()-.5)*BW*.65;wz=BD/2+.06}
+      add(wx,wy2,wz,.4+Math.random()*.35,false);
+    }
+  }
+  for(var i=0;i<800;i++){var r=5+Math.random()*40,a=Math.random()*Math.PI*2;add(Math.cos(a)*r,-.4+Math.random()*.3,Math.sin(a)*r,.02+Math.random()*.055,false)}
+  for(var i=0;i<1100;i++){var dy=-4+Math.random()*(maxY+14),dr=Math.random()*38,da=Math.random()*Math.PI*2;add(Math.cos(da)*dr,dy,Math.sin(da)*dr,.008+Math.random()*.032,false)}
+  return{p:new Float32Array(pos),o:new Float32Array(ops),r:new Float32Array(red)};
+}
+
+var scene,cam,ren,pts,sy=0,ty=0;
+
+function boot(){
+  var ct=document.getElementById('bg');
+  if(ct.querySelector('canvas')) return;
+  scene=new THREE.Scene();
+  cam=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,350);
+  cam.position.set(Math.cos(ANG_START)*RAD_START, CAM_Y_START, Math.sin(ANG_START)*RAD_START);
+  cam.lookAt(0, CAM_Y_START-2, 0);
+
+  ren=new THREE.WebGLRenderer({antialias:true});
+  ren.setSize(innerWidth,innerHeight);
+  ren.setPixelRatio(Math.min(devicePixelRatio,2));
+  ren.setClearColor(0x000000);
+  ct.appendChild(ren.domElement);
+
+  var d=mkPts();
+  var geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(d.p,3));
+  geo.setAttribute('aOp',new THREE.BufferAttribute(d.o,1));
+  geo.setAttribute('aRed',new THREE.BufferAttribute(d.r,1));
+
+  var mat=new THREE.ShaderMaterial({
+    uniforms:{uT:{value:0},uCY:{value:CAM_Y_START},uPR:{value:Math.min(devicePixelRatio,2)}},
+    vertexShader:`
+      attribute float aOp;attribute float aRed;
+      varying float vOp;varying float vDY;varying float vRed;
+      uniform float uT,uCY,uPR;
+      void main(){
+        vOp=aOp;vRed=aRed;
+        vec4 mv=modelViewMatrix*vec4(position,1.);
+        vDY=abs(position.y-uCY);
+        float pulse=.8+.2*sin(uT*1.1+position.x*.3+position.z*.2+position.y*.15);
+        float prox=1.-smoothstep(0.,22.,vDY);
+        gl_PointSize=(1.5+prox*4.2)*pulse*uPR;
+        gl_Position=projectionMatrix*mv;
+      }`,
+    fragmentShader:`
+      varying float vOp;varying float vDY;varying float vRed;
+      uniform float uT;
+      void main(){
+        float d=length(gl_PointCoord-.5);
+        if(d>.5)discard;
+        float prox=1.-smoothstep(0.,18.,vDY);
+        float a=vOp*(.07+prox*.93)*smoothstep(.5,.1,d);
+        vec3 col=vec3(1.);
+        if(vRed>.5){
+          float phase=fract(uT*0.3+vDY*0.1+vOp*7.);
+          float on=step(.85,phase);
+          col=mix(vec3(1.),vec3(1.,.15,.1),on);
+          a=mix(a,a*2.5,on);
+        }
+        gl_FragColor=vec4(col,a);
+      }`,
+    transparent:true,depthWrite:false,blending:THREE.AdditiveBlending
+  });
+  pts=new THREE.Points(geo,mat);
+  scene.add(pts);
+
+  addEventListener('scroll',function(){ty=scrollY},{passive:true});
+  addEventListener('resize',function(){cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();ren.setSize(innerWidth,innerHeight);mat.uniforms.uPR.value=Math.min(devicePixelRatio,2)});
+  raf();
+}
+
+function raf(){
+  requestAnimationFrame(raf);
+  sy+=(ty-sy)*.07;
+  var total=SECTIONS*PX_PER,p=Math.min(sy/total,1);
+  var si=Math.min(Math.floor(sy/PX_PER),SECTIONS-1);
+
+  // Straight descent from mid-upper building to below ground
+  var camY=CAM_Y_START+(CAM_Y_END-CAM_Y_START)*p;
+  // Gentle orbit
+  var ang=ANG_START+p*Math.PI*.65;
+  var rad=RAD_START-p*10;
+
+  cam.position.set(Math.cos(ang)*rad, camY, Math.sin(ang)*rad);
+  cam.lookAt(0, camY-2, 0);
+
+  var t=performance.now()*.001;
+  pts.material.uniforms.uT.value=t;
+  pts.material.uniforms.uCY.value=camY;
+  pts.rotation.y=Math.sin(t*.03)*.018;
+
+  document.querySelectorAll('.sc').forEach(function(el){el.classList.toggle('on',+el.dataset.s===si)});
+  document.getElementById('prog').style.width=(p*100)+'%';
+  ren.render(scene,cam);
+}
+</script>
+</body>
+</html>
